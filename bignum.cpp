@@ -2,7 +2,7 @@
 #include <string>
 #include <cctype>
 #include <algorithm>
-#include<cmath>
+#include <cmath>
 
 #include "bignum.hpp"
 
@@ -17,8 +17,8 @@ Bignum::Bignum(){
   this->data = {'0'};
 }
 
-/** Creates a bignum, assuming that the string input is already valid, as 
-already checked in main. */
+/** Creates a bignum, assuming that the string input is already valid (as in all
+digits are integers), as already checked in main. */
 Bignum::Bignum(const std::string& data) {
   bool leadingZero = true;
   for (auto& digit : data) {
@@ -217,6 +217,7 @@ std::string decimalToBinary(int decimal) {
 //   return (result % c);
 
 // };
+/** Performs a^b % c */
 Bignum Bignum::modexp(const Bignum& b, const Bignum& c) const {
   Bignum base = *this % c;  
   Bignum exponent = b;
