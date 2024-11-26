@@ -3,6 +3,8 @@
 #include <cctype>
 #include <algorithm>
 #include <cmath>
+#include <thread>
+#include <vector>
 
 #include "bignum.hpp"
 
@@ -193,30 +195,7 @@ std::string decimalToBinary(int decimal) {
   return decimalToBinary(decimal / 2) + std::to_string(decimal % 2);
 }
 
-// Bignum Bignum::modexp(const Bignum& b, const Bignum& c) const {
-  
-//   std::string binary = decimalToBinary(std::stoi(b.to_string()));
-//   // std::cout << "binary: " << binary << std::endl;
-//   Bignum result = Bignum("1");
-//   // for (int i = binary.length()-1; i >= 0; i--) {
-//   for (int i = 0; i < binary.length(); i++) {
-//     int index = (binary.length()-1) - i;
 
-//     if (binary[index] == '1') {
-//       Bignum mod_term = Bignum("1");
-//       for (int exp = 0; exp < std::pow(2, i); exp ++) {
-//         std::cout << "exp: " << exp << std::endl;
-//         mod_term = mod_term * *this;
-//       }
-//       result = result * (mod_term % c);
-
-//     }
-
-//   }
-
-//   return (result % c);
-
-// };
 /** Performs a^b % c */
 Bignum Bignum::modexp(const Bignum& b, const Bignum& c) const {
   Bignum base = *this % c;  
@@ -226,12 +205,47 @@ Bignum Bignum::modexp(const Bignum& b, const Bignum& c) const {
   while (exponent > Bignum("0")) {
     if (exponent % Bignum("2") == Bignum("1")) { 
       result = (result * base) % c;
-  }
+    }
     base = (base * base) % c;
     exponent = exponent / Bignum("2");
   }
+  // std::cout << "finish modexp" << std::endl;
   return result;
 }
+
+
+// Bignum Bignum::modexp(const Bignum& b, const Bignum& c) const {
+//   Bignum base = *this % c;
+//   Bignum exponent = b;
+//   Bignum result = Bignum("1");
+
+//   int num_threads = 10;
+//   std::vector<std::thread> threads;
+//   std::vector<Bignum> partial_results(num_threads);
+  
+//   for (int i = 0; i < num_threads; ++i) {
+//     threads.push_back(std::thread([&, i] {
+//       Bignum chunk_result = Bignum("1");
+//       for (int j = i; j < exponent.toInt(); j += num_threads) {
+//         if (exponent % Bignum("2") == Bignum("1")) {
+//           chunk_result = (chunk_result * base) % c;
+//         }
+//         base = (base * base) % c;
+//       }
+//       partial_results[i] = chunk_result;
+//     }));
+//   }
+
+//   for (auto& t : threads) {
+//     t.join();
+//   }
+
+//   for (const auto& partial : partial_results) {
+//     result = (result * partial) % c;
+//   }
+
+//   return result;
+// }
 
 
 bool Bignum::operator<(const Bignum& other) const {
@@ -241,9 +255,7 @@ bool Bignum::operator<(const Bignum& other) const {
     // std::cout << "this is shorter than other: " <<( num1.size() < num2.size()) << std::endl;
     return num1.size() < num2.size();
   } else {
-    // for (i = num1.length()-1; i >= 0; i--) { 
 
-    // }
     for (int i = 0; i < num1.size(); i++) {
       // this workks bc a charcater of a number is the number + 48 (the ascii respresentation of '0')
       if ((num1[i] - '0') < (num2[i] - '0')) {

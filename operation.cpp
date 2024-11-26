@@ -69,6 +69,44 @@ Bignum encryption(std::string num1, std::string num2, std::string num3) {
 
 }
 
+// std::string decryption(Bignum num1, Bignum num2, Bignum num3) { 
+//   std::string result = bigNum1.modexp(bigNum2, Bignum(num3));
+//   // std::cout << result.to_string() << std::endl;
+//   return result;
+
+// }
+
+// std::string decryption(std::string num1, std::string num2, std::string num3) { 
+//   Bignum bigNum1(num1);
+//   Bignum bigNum2(num2);
+//   Bignum bigNum3(num3);
+//   std::string result = bigNum1.modexp(bigNum2, Bignum(num3));
+//   // std::cout << result.to_string() << std::endl;
+//   return result;
+
+// }
+
+std::string decryption(std::string& line, std::string rsa_d, std::string rsa_n) { 
+  Bignum mod_line = Bignum(line).modexp(rsa_d, Bignum(rsa_n));
+  std::string input = mod_line.to_string();
+
+  int i = 0;
+  std::string result = "";
+  while (i < input.length()) {
+    std::string triple = (input).substr(i, 3);
+
+    int ascii_value = std::stoi(triple);
+        
+    result += static_cast<char>(ascii_value);
+    std::cout << "curr " << result << std::endl;
+
+    i += 3;
+  }
+  return result;
+
+}
+
+
 
 
 int prev_main(int argc, char *argv[])

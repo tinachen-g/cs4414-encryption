@@ -72,12 +72,14 @@ void encrypt(std::istream& input) {
     // TODO: should paralleize everything
     std::string first_half = lineIntoInts(halves[0]);
     Bignum first = encryption(first_half, RSA_E, RSA_N);
-    std::cout << "first Bignum " << first.to_string() << std::endl;
+    // std::cout << "first Bignum " << first.to_string() << std::endl;
+    std::cout << first.to_string() << std::endl;
 
 
     std::string second_half = lineIntoInts(halves[1]);
     Bignum second = encryption(second_half, RSA_E, RSA_N);
-    std::cout << "second Bignum " << second.to_string() << std::endl;
+    // std::cout << "second Bignum " << second.to_string() << std::endl;
+    std::cout << second.to_string() << std::endl;
   
     line_number++;
   }
@@ -85,26 +87,31 @@ void encrypt(std::istream& input) {
 }
 
 void decrypt(std::istream& input) {
-    // std::string line;
-    // while (std::getline(input, line)) {
-    //     // Split the concatenated output into two `Bignum`s
-    //     size_t mid = line.size() / 2;
-    //     Bignum encrypted_message(line.substr(0, mid));
-    //     Bignum encrypted_metadata(line.substr(mid));
+    std::string line1, line2;
+    while (std::getline(input, line1)) {
+        // read the next line
+        if (!std::getline(input, line2)) {
+            std::cout << "Warning: Odd number of lines. Possible error. Last line will be ignored." << std::endl;
+            break;
+        }
 
-    //     // Decrypt both parts
-    //     Bignum decrypted_message = encrypted_message.decrypt(RSA_D, RSA_N);
-    //     Bignum decrypted_metadata = encrypted_metadata.decrypt(RSA_D, RSA_N);
+        // decrypt both parts
+        std::string first_line = decryption(line1, RSA_D, RSA_N);
+        std::cout << "first line is " << first_line << std::endl;
+        std::string second_line = decryption(line2, RSA_D, RSA_N);
+        std::cout << "second line is " << second_line << std::endl;
 
-    //     // Convert back to string and output the original message
-    //     std::cout << decrypted_message.to_string() << std::endl;
-    // }
+        std::string combined_line = first_line + second_line; 
+
+
+        std::cout << combined_line << std::endl;
+    }
     return;
 }
 
 int main(int argc, char* argv[]) {
     if (argc < 2) {
-        std::cerr << "Usage: ./bignum [e/d] < input.txt"  << std::endl;
+        std::cerr << "Usage: ./bignum <e/d> < text.txt"  << std::endl;
         return 1;
     }
 
