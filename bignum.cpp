@@ -5,6 +5,10 @@
 #include <cmath>
 #include <thread>
 #include <vector>
+#include <future>
+#include <atomic>
+#include <mutex>
+#include <unordered_map>
 
 #include "bignum.hpp"
 
@@ -141,38 +145,45 @@ Bignum Bignum::operator-(const Bignum& other) const {
 
 };
 
-Bignum Bignum::operator*(const Bignum& other) const {
-  if (this->check() && other.check()) {
-    std::string result;
-    const Bignum& longer = this->getNum().size() >= other.getNum().size() ? *this: other;
-    const std::vector<char>& shorter = this->getNum().size() >= other.getNum().size() ? other.getNum() : this->getNum();
-    // std::cout << "longer is: " << longer.to_string() << std::endl;
-    Bignum product = Bignum();
-    int tens = 0;
-    for (auto rit1 = shorter.rbegin(); rit1 != shorter.rend(); rit1++, tens++) {
-      // std::cout << "tens: " << tens<< std::endl;
-      int digit = (*rit1 - '0');
-      if (digit == 0) {
-        continue;
-      } else {
-        Bignum temp = longer.multiplyBySingleDigit(digit);
-        // std::cout << "after first: " << temp.to_string() << std::endl;
-        for (int i = 1; i <= tens; i++) {
-          // std::cout << "tens loops: " << temp.to_string() << std::endl;
-          temp = temp.multiplyBySingleDigit(10);
-          // std::cout << "tens loops: " << temp.to_string() << std::endl;
-        }
-        product = product + temp;
+Bignum Bignum::operator*(const Bignum &other) const
+{
+  if (this->check() && other.check())
+  {
+    const std::vector<char> &num1 = this->getNum();
+    const std::vector<char> &num2 = other.getNum();
+    int len1 = num1.size(), len2 = num2.size();
+
+    std::vector<int> result(len1 + len2, 0);
+
+    for (int i = len1 - 1; i >= 0; --i)
+    {
+      int carry = 0;
+      for (int j = len2 - 1; j >= 0; --j)
+      {
+        int mul = (num1[i] - '0') * (num2[j] - '0') + result[i + j + 1] + carry;
+        result[i + j + 1] = mul % 10;
+        carry = mul / 10;
       }
+      result[i] += carry;
     }
 
-    return product;
-  
-  } else {
+    std::string resultStr;
+    bool leadingZero = true;
+    for (int num : result)
+    {
+      if (num == 0 && leadingZero)
+        continue;
+      leadingZero = false;
+      resultStr.push_back(num + '0');
+    }
+
+    return Bignum(leadingZero ? "0" : resultStr);
+  }
+  else
+  {
     std::cout << "HELLPPPPPPPPP" << std::endl;
     return Bignum();
   }
-
 };
  
 Bignum Bignum::operator/(const Bignum& other) const {
@@ -198,16 +209,19 @@ std::string decimalToBinary(int decimal) {
 
 /** Performs a^b % c */
 Bignum Bignum::modexp(const Bignum& b, const Bignum& c) const {
+  static const Bignum ONE("1");
+  static const Bignum TWO("2");
+
   Bignum base = *this % c;  
   Bignum exponent = b;
-  Bignum result = Bignum("1");
+  Bignum result = ONE;
 
   while (exponent > Bignum("0")) {
-    if (exponent % Bignum("2") == Bignum("1")) { 
+    if (exponent % TWO == ONE) { 
       result = (result * base) % c;
     }
     base = (base * base) % c;
-    exponent = exponent / Bignum("2");
+    exponent = exponent / TWO;
   }
   // std::cout << "finish modexp" << std::endl;
   return result;

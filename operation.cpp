@@ -86,26 +86,36 @@ Bignum encryption(std::string num1, std::string num2, std::string num3) {
 
 // }
 
-std::string decryption(std::string& line, std::string rsa_d, std::string rsa_n) { 
+std::string decryption(std::string &line, std::string rsa_d, std::string rsa_n)
+{
+  std::cout << "operation.cpp line 90 " << std::endl;
   Bignum mod_line = Bignum(line).modexp(rsa_d, Bignum(rsa_n));
   std::string input = mod_line.to_string();
+  std::cout << "operation.cpp line 93 " << std::endl;
+
+  int padding_length = input.length() % 3;
+  if (padding_length != 0)
+  {
+    int padding_needed = 3 - padding_length;
+    input = std::string(padding_needed, '0') + input;
+  }
 
   int i = 0;
   std::string result = "";
-  while (i < input.length()) {
+  while (i < input.length())
+  {
     std::string triple = (input).substr(i, 3);
 
     int ascii_value = std::stoi(triple);
-        
+    // std::cout << "triple " << triple << std::endl;
+
     result += static_cast<char>(ascii_value);
-    std::cout << "curr " << result << std::endl;
+    // std::cout << "curr " << result << std::endl;
 
     i += 3;
   }
   return result;
-
 }
-
 
 
 

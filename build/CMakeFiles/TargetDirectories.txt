@@ -1,0 +1,4 @@
+/Users/tinacheng/cs4414/hw4-2/build/CMakeFiles/other_files.dir
+/Users/tinacheng/cs4414/hw4-2/build/CMakeFiles/bignum.dir
+/Users/tinacheng/cs4414/hw4-2/build/CMakeFiles/edit_cache.dir
+/Users/tinacheng/cs4414/hw4-2/build/CMakeFiles/rebuild_cache.dir

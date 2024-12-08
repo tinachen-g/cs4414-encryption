@@ -8,6 +8,9 @@ set(CMAKE_BUILD_TYPE Release)
 add_library(other_files
   bignum.hpp
   bignum.cpp
+  operation.hpp
+  operation.cpp
+  
 )
 
 target_include_directories(other_files PUBLIC

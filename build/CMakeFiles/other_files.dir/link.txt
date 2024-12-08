@@ -1,0 +1,2 @@
+/Library/Developer/CommandLineTools/usr/bin/ar qc libother_files.a CMakeFiles/other_files.dir/bignum.cpp.o CMakeFiles/other_files.dir/operation.cpp.o
+/Library/Developer/CommandLineTools/usr/bin/ranlib libother_files.a
