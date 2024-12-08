@@ -1,1 +1,1 @@
-/Library/Developer/CommandLineTools/usr/bin/c++ -O3 -DNDEBUG -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/bignum.dir/main.cpp.o -o bignum  libother_files.a
+/usr/bin/c++ -O3 -DNDEBUG CMakeFiles/bignum.dir/main.cpp.o -o bignum  libother_files.a 

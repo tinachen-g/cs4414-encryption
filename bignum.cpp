@@ -19,35 +19,42 @@
 //            (this->getLength() == other.getLength() && this->getNucleotideSequence() < other.getNucleotideSequence());
 // }
 
-Bignum::Bignum(){
+Bignum::Bignum()
+{
   this->data = {'0'};
 }
 
 /** Creates a bignum, assuming that the string input is already valid (as in all
 digits are integers), as already checked in main. */
-Bignum::Bignum(const std::string& data) {
+Bignum::Bignum(const std::string &data)
+{
   bool leadingZero = true;
-  for (auto& digit : data) {
-    if (leadingZero && digit == '0') {
-        continue;
+  for (auto &digit : data)
+  {
+    if (leadingZero && digit == '0')
+    {
+      continue;
     }
     leadingZero = false;
     this->data.emplace_back(digit);
   }
-  if (this->data.size() == 0) {
+  if (this->data.size() == 0)
+  {
     this->data.emplace_back('0');
   }
 }
 
-Bignum Bignum::operator+(const Bignum& other) const {
-  if (this->check() && other.check()) {
+Bignum Bignum::operator+(const Bignum &other) const
+{
+  if (this->check() && other.check())
+  {
     bool carry = false;
     std::string result;
     auto rit1 = this->getNum().rbegin();
     auto rit2 = other.getNum().rbegin();
 
-
-    for (; rit1 != this->getNum().rend() && rit2 != other.getNum().rend(); rit1++, rit2++) {
+    for (; rit1 != this->getNum().rend() && rit2 != other.getNum().rend(); rit1++, rit2++)
+    {
       int sum = (*rit1 - '0') + (*rit2 - '0') + (carry ? 1 : 0);
       result = std::string(1, (sum % 10) + '0') + result;
       carry = sum > 9;
@@ -55,95 +62,31 @@ Bignum Bignum::operator+(const Bignum& other) const {
     // for (int i = this->getNum().size() - 1, j = other.getNum().size() - 1; i >= 0 && j >= 0; --i, --j) {
     //   int sum = (*rit1 - '0') + (*rit2 - '0') + extra;
     // }
-    while (rit1 != this->getNum().rend()) {
-        int sum = (*rit1 - '0') + (carry ? 1 : 0);
-        result = std::string(1, (sum % 10) + '0') + result;
-        carry = sum > 9;
-        ++rit1;
+    while (rit1 != this->getNum().rend())
+    {
+      int sum = (*rit1 - '0') + (carry ? 1 : 0);
+      result = std::string(1, (sum % 10) + '0') + result;
+      carry = sum > 9;
+      ++rit1;
     }
 
-    while (rit2 != other.getNum().rend()) {
-        int sum = (*rit2 - '0') + (carry ? 1 : 0);
-        result = std::string(1, (sum % 10) + '0') + result;
-        carry = sum > 9;
-        ++rit2;
+    while (rit2 != other.getNum().rend())
+    {
+      int sum = (*rit2 - '0') + (carry ? 1 : 0);
+      result = std::string(1, (sum % 10) + '0') + result;
+      carry = sum > 9;
+      ++rit2;
     }
     result = std::string(1, (carry ? 1 : 0) + '0') + result;
 
     return Bignum(result);
-  } else {
+  }
+  else
+  {
     std::cout << "HELLPPPPPPPPP" << std::endl;
     return Bignum();
   }
-  
 };
-
-// Bignum Bignum::operator-(const Bignum& other) const {
-//   // std::vector<std::string> vec = this->data ? this->data.length() > other.length() : 
-
-//   // bool carry = false;
-//   // for (std::vector<std::string>::reverse_iterator riter = this->data.rbegin(); riter != this->data.rend(); riter++) { 
-//   //   // do stuff
-    
-
-//   // } 
-//   if (this->check() && other.check()) {
-//     if (*this < other) {
-//       std::cout << "Unsupported: Negative number" << std::endl;
-//       return Bignum();
-//     } else {
-//       bool borrow = false;
-//       std::string result;
-//       auto rit1 = this->getNum().rbegin();
-//       auto rit2 = other.getNum().rbegin();
-
-//       for (; rit1 != this->getNum().rend() && rit2 != other.getNum().rend(); rit1++, rit2++) {
-//         int extra = 0;
-//         if ((*rit1 - '0') - (*rit2 - '0') - (borrow ? 1 : 0) < 0) {
-//           extra = 10;
-//         }
-//         // std::cout << (*rit1 - '0') << " - " << (*rit2 - '0') << std::endl;
-//         int difference = (*rit1 - '0' + extra) - (*rit2 - '0') - (borrow ? 1 : 0);
-//         // std::cout << "difference: " << difference << std::endl;
-//         // std::cout << result << std::endl;
-//         result = std::string(1, difference + '0') + result;
-//         borrow = (extra == 10);
-//       }
-//       // for (int i = this->getNum().size() - 1, j = other.getNum().size() - 1; i >= 0 && j >= 0; --i, --j) {
-//       //   int sum = (*rit1 - '0') + (*rit2 - '0') + extra; 
-//       // }
-//       while (rit1 != this->getNum().rend()) {
-//         int extra = 0;
-//         if ((*rit1 - '0')- (borrow ? 1 : 0) < 0) {
-//           extra = 10;
-//         }
-//         int difference = (*rit1 - '0' + extra)- (borrow ? 1 : 0);
-//         // std::cout << "difference" << difference << std::endl;
-//         result = std::string(1, difference + '0') + result;
-//         borrow = (extra == 10);
-//         // std::cout << "reslt" << result << std::endl;
-//         rit1++;
-//       }
-
-//       // while (rit2 != other.getNum().rend()) {
-//       //   int extra = 0;
-//       //   if ((*rit1 - '0') - (*rit2 - '0') < 0) {
-//       //     extra = 10;
-//       //   }
-//       //   int difference = (*rit1 - '0' + extra) - (*rit2 - '0') - (borrow ? 1 : 0);
-//       //   result = std::string(1, difference + '0') + result;
-//       //   borrow = (extra == 10);
-//       // }
-
-//       return Bignum(result);
-
-//     }
-//   } else {
-//     std::cout << "HELLPPPPPPPPP" << std::endl;
-//     return Bignum();
-//   }
-
-// };
 
 Bignum Bignum::operator-(const Bignum &other) const {
   if (!this->check() || !other.check()) {
@@ -208,9 +151,8 @@ Bignum Bignum::operator*(const Bignum &other) const
     bool leadingZero = true;
     for (int num : result)
     {
-      if (num == 0 && leadingZero) {
+      if (num == 0 && leadingZero)
         continue;
-      }
       leadingZero = false;
       resultStr.push_back(num + '0');
     }
@@ -223,39 +165,44 @@ Bignum Bignum::operator*(const Bignum &other) const
     return Bignum();
   }
 };
- 
-Bignum Bignum::operator/(const Bignum& other) const {
+
+Bignum Bignum::operator/(const Bignum &other) const
+{
   return divide(other, "/");
-
 };
- 
-Bignum Bignum::operator%(const Bignum& other) const {
+
+Bignum Bignum::operator%(const Bignum &other) const
+{
   return divide(other, "%");
-
 };
 
-std::string decimalToBinary(int decimal) { 
-  if (decimal == 0) { 
+std::string decimalToBinary(int decimal)
+{
+  if (decimal == 0)
+  {
     return "0";
-  } 
-  if (decimal == 1) { 
+  }
+  if (decimal == 1)
+  {
     return "1";
   }
   return decimalToBinary(decimal / 2) + std::to_string(decimal % 2);
 }
 
-
 /** Performs a^b % c */
-Bignum Bignum::modexp(const Bignum& b, const Bignum& c) const {
+Bignum Bignum::modexp(const Bignum &b, const Bignum &c) const
+{
   static const Bignum ONE("1");
   static const Bignum TWO("2");
 
-  Bignum base = *this % c;  
+  Bignum base = *this % c;
   Bignum exponent = b;
   Bignum result = ONE;
 
-  while (exponent > Bignum("0")) {
-    if (exponent % TWO == ONE) { 
+  while (exponent > Bignum("0"))
+  {
+    if (exponent % TWO == ONE)
+    {
       result = (result * base) % c;
     }
     base = (base * base) % c;
@@ -265,7 +212,6 @@ Bignum Bignum::modexp(const Bignum& b, const Bignum& c) const {
   return result;
 }
 
-
 // Bignum Bignum::modexp(const Bignum& b, const Bignum& c) const {
 //   Bignum base = *this % c;
 //   Bignum exponent = b;
@@ -274,7 +220,7 @@ Bignum Bignum::modexp(const Bignum& b, const Bignum& c) const {
 //   int num_threads = 10;
 //   std::vector<std::thread> threads;
 //   std::vector<Bignum> partial_results(num_threads);
-  
+
 //   for (int i = 0; i < num_threads; ++i) {
 //     threads.push_back(std::thread([&, i] {
 //       Bignum chunk_result = Bignum("1");
@@ -299,51 +245,61 @@ Bignum Bignum::modexp(const Bignum& b, const Bignum& c) const {
 //   return result;
 // }
 
-
-bool Bignum::operator<(const Bignum& other) const {
-  const std::vector<char>& num1 = this->getNum();
-  const std::vector<char>& num2 = other.getNum();
-  if (num1.size() != num2.size()) {
+bool Bignum::operator<(const Bignum &other) const
+{
+  const std::vector<char> &num1 = this->getNum();
+  const std::vector<char> &num2 = other.getNum();
+  if (num1.size() != num2.size())
+  {
     // std::cout << "this is shorter than other: " <<( num1.size() < num2.size()) << std::endl;
     return num1.size() < num2.size();
-  } else {
+  }
+  else
+  {
 
-    for (int i = 0; i < num1.size(); i++) {
+    for (int i = 0; i < num1.size(); i++)
+    {
       // this workks bc a charcater of a number is the number + 48 (the ascii respresentation of '0')
-      if ((num1[i] - '0') < (num2[i] - '0')) {
+      if ((num1[i] - '0') < (num2[i] - '0'))
+      {
         return true;
-      } else if ((num1[i] - '0') > (num2[i] - '0')) {
+      }
+      else if ((num1[i] - '0') > (num2[i] - '0'))
+      {
         return false;
       }
     }
     return false;
   }
-
 };
 
-bool Bignum::operator>(const Bignum& other) const {
+bool Bignum::operator>(const Bignum &other) const
+{
   return !(*this == other) && !(*this < other);
-
 };
-bool Bignum::operator==(const Bignum& other) const {
+bool Bignum::operator==(const Bignum &other) const
+{
   std::vector<char> num1 = this->getNum();
   std::vector<char> num2 = other.getNum();
   return num1 == num2;
-
 };
 
-Bignum Bignum::multiplyBySingleDigit(int digit) const{
-  if (this->check()) {
+Bignum Bignum::multiplyBySingleDigit(int digit) const
+{
+  if (this->check())
+  {
     int carry = 0;
     std::string result;
 
-    for (auto rit1 = this->getNum().rbegin(); rit1 != this->getNum().rend(); rit1++) {
-      int product = ((*rit1 - '0') * digit ) + (carry);
+    for (auto rit1 = this->getNum().rbegin(); rit1 != this->getNum().rend(); rit1++)
+    {
+      int product = ((*rit1 - '0') * digit) + (carry);
       // can divide bt 10 and dont need to mod 100 since 1 digit x 1digit is max 81
       result = std::string(1, (product % 10) + '0') + result;
       carry = ((product / 10) % 10);
     }
-    if (carry > 0) {
+    if (carry > 0)
+    {
       result = std::string(1, carry + '0') + result;
     }
     // std::cout << "result is: " << result << std::endl;
@@ -353,31 +309,37 @@ Bignum Bignum::multiplyBySingleDigit(int digit) const{
     // }
 
     return Bignum(result);
-  
-  } else {
+  }
+  else
+  {
     std::cout << "HELLPPPPPPPPP" << std::endl;
     return Bignum();
   }
-
 };
 
-Bignum Bignum::divide(const Bignum& other, std::string op) const {
-  if (this->check() && other.check()) {
+Bignum Bignum::divide(const Bignum &other, std::string op) const
+{
+  if (this->check() && other.check())
+  {
     Bignum mod = Bignum();
     Bignum div = Bignum();
 
-    if (other.to_string() == "0") {
+    if (other.to_string() == "0")
+    {
       std::cout << "Error: Divide by zero" << std::endl;
       return Bignum();
-    } else {
-      
+    }
+    else
+    {
+
       std::string result;
-      std::string current_remainder;  
+      std::string current_remainder;
       // Bignum remainder;
       std::string divisor = other.to_string();
 
       // interate through the dividend
-      for (auto rit1 = this->getNum().begin(); rit1 != this->getNum().end(); rit1++) {
+      for (auto rit1 = this->getNum().begin(); rit1 != this->getNum().end(); rit1++)
+      {
         current_remainder += *rit1;
         // std::cout << "remainder: " << current_remainder << std::endl;
         // int remainder = std::stoi(current_remainder);
@@ -387,10 +349,12 @@ Bignum Bignum::divide(const Bignum& other, std::string op) const {
         int digit = 0;
 
         // if prefix of dividend is larger than the divisor
-        if (remainder > divisor_b || remainder == divisor_b) {
+        if (remainder > divisor_b || remainder == divisor_b)
+        {
           // keep subtracting until the difference is smaller than the divisor
-      
-          while (remainder > divisor_b || remainder == divisor_b) {
+
+          while (remainder > divisor_b || remainder == divisor_b)
+          {
             remainder = remainder - divisor_b;
             // std::cout << "remainder: " << remainder << std::endl;
             digit += 1;
@@ -400,52 +364,103 @@ Bignum Bignum::divide(const Bignum& other, std::string op) const {
           // std::cout << "digit: " << digit << std::endl;
           result += std::to_string(digit);
           // std::cout << "result: " << result << std::endl;
-        } else {
+        }
+        else
+        {
           result += std::to_string(digit);
           // shift right
           continue;
         }
       }
-      mod = Bignum(current_remainder); 
+      mod = Bignum(current_remainder);
       div = Bignum(result);
-      if (op == "/") {
+      if (op == "/")
+      {
         return div;
-      } else if (op == "%"){
+      }
+      else if (op == "%")
+      {
         return mod;
-      } else {
+      }
+      else
+      {
         std::cout << "Some error occurred. Op is not / or %" << std::endl;
         return Bignum();
       }
     }
-  
-  } else {
+  }
+  else
+  {
     std::cout << "HELLPPPPPPPPP" << std::endl;
     return Bignum();
   }
+};
 
-}
+// Bignum Bignum::divide(const Bignum &other, const std::string &op) const {
+//   if (!this->check() || !other.check()) {
+//     std::cerr << "Invalid numbers" << std::endl;
+//     return Bignum();
+//   }
+//   if (other.to_string() == "0") {
+//     std::cerr << "Error: Divide by zero" << std::endl;
+//     return Bignum();
+//   }
+
+//   std::string result;
+//   std::string current_remainder;
+
+//   const std::string &divisor = other.to_string();
+//   for (char c : this->to_string()) {
+//     current_remainder += c;
+//     int digit = 0;
+
+//     while (Bignum(current_remainder) > Bignum(divisor) || Bignum(current_remainder) == Bignum(divisor)) {
+//       current_remainder = (Bignum(current_remainder) - Bignum(divisor)).to_string();
+//       ++digit;
+//     }
+//     result.push_back(digit + '0');
+//   }
+
+//   Bignum mod = Bignum(current_remainder);
+//   Bignum div = Bignum(result);
+//   if (op == "/") return div;
+//   if (op == "%") return mod;
+
+//   std::cerr << "Unsupported operation" << std::endl;
+//   return Bignum();
+// }
+
 
 /** Checks whther a bignum is a valid number (digits are numbers 0-9)
  */
-bool Bignum::check() const {
-  for (const char& digit: this->data ) {
-    if (!std::isdigit(digit)) return false;
+bool Bignum::check() const
+{
+  for (const char &digit : this->data)
+  {
+    if (!std::isdigit(digit))
+      return false;
   }
   return true;
 }
 
-std::string Bignum::to_string() const {
+std::string Bignum::to_string() const
+{
   std::string result = "";
-  for (const char& digit : this->data) {
-    if (result == "0") {
+  for (const char &digit : this->data)
+  {
+    if (result == "0")
+    {
       result = digit;
-    } else {
+    }
+    else
+    {
       result += digit;
     }
   }
   return result;
 }
 
-const std::vector<char>& Bignum::getNum() const {
+const std::vector<char> &Bignum::getNum() const
+{
   return this->data;
 };
