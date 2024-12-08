@@ -78,71 +78,108 @@ Bignum Bignum::operator+(const Bignum& other) const {
   
 };
 
-Bignum Bignum::operator-(const Bignum& other) const {
-  // std::vector<std::string> vec = this->data ? this->data.length() > other.length() : 
+// Bignum Bignum::operator-(const Bignum& other) const {
+//   // std::vector<std::string> vec = this->data ? this->data.length() > other.length() : 
 
-  // bool carry = false;
-  // for (std::vector<std::string>::reverse_iterator riter = this->data.rbegin(); riter != this->data.rend(); riter++) { 
-  //   // do stuff
+//   // bool carry = false;
+//   // for (std::vector<std::string>::reverse_iterator riter = this->data.rbegin(); riter != this->data.rend(); riter++) { 
+//   //   // do stuff
     
 
-  // } 
-  if (this->check() && other.check()) {
-    if (*this < other) {
-      std::cout << "Unsupported: Negative number" << std::endl;
-      return Bignum();
-    } else {
-      bool borrow = false;
-      std::string result;
-      auto rit1 = this->getNum().rbegin();
-      auto rit2 = other.getNum().rbegin();
+//   // } 
+//   if (this->check() && other.check()) {
+//     if (*this < other) {
+//       std::cout << "Unsupported: Negative number" << std::endl;
+//       return Bignum();
+//     } else {
+//       bool borrow = false;
+//       std::string result;
+//       auto rit1 = this->getNum().rbegin();
+//       auto rit2 = other.getNum().rbegin();
 
-      for (; rit1 != this->getNum().rend() && rit2 != other.getNum().rend(); rit1++, rit2++) {
-        int extra = 0;
-        if ((*rit1 - '0') - (*rit2 - '0') - (borrow ? 1 : 0) < 0) {
-          extra = 10;
-        }
-        // std::cout << (*rit1 - '0') << " - " << (*rit2 - '0') << std::endl;
-        int difference = (*rit1 - '0' + extra) - (*rit2 - '0') - (borrow ? 1 : 0);
-        // std::cout << "difference: " << difference << std::endl;
-        // std::cout << result << std::endl;
-        result = std::string(1, difference + '0') + result;
-        borrow = (extra == 10);
-      }
-      // for (int i = this->getNum().size() - 1, j = other.getNum().size() - 1; i >= 0 && j >= 0; --i, --j) {
-      //   int sum = (*rit1 - '0') + (*rit2 - '0') + extra; 
-      // }
-      while (rit1 != this->getNum().rend()) {
-        int extra = 0;
-        if ((*rit1 - '0')- (borrow ? 1 : 0) < 0) {
-          extra = 10;
-        }
-        int difference = (*rit1 - '0' + extra)- (borrow ? 1 : 0);
-        // std::cout << "difference" << difference << std::endl;
-        result = std::string(1, difference + '0') + result;
-        borrow = (extra == 10);
-        // std::cout << "reslt" << result << std::endl;
-        rit1++;
-      }
+//       for (; rit1 != this->getNum().rend() && rit2 != other.getNum().rend(); rit1++, rit2++) {
+//         int extra = 0;
+//         if ((*rit1 - '0') - (*rit2 - '0') - (borrow ? 1 : 0) < 0) {
+//           extra = 10;
+//         }
+//         // std::cout << (*rit1 - '0') << " - " << (*rit2 - '0') << std::endl;
+//         int difference = (*rit1 - '0' + extra) - (*rit2 - '0') - (borrow ? 1 : 0);
+//         // std::cout << "difference: " << difference << std::endl;
+//         // std::cout << result << std::endl;
+//         result = std::string(1, difference + '0') + result;
+//         borrow = (extra == 10);
+//       }
+//       // for (int i = this->getNum().size() - 1, j = other.getNum().size() - 1; i >= 0 && j >= 0; --i, --j) {
+//       //   int sum = (*rit1 - '0') + (*rit2 - '0') + extra; 
+//       // }
+//       while (rit1 != this->getNum().rend()) {
+//         int extra = 0;
+//         if ((*rit1 - '0')- (borrow ? 1 : 0) < 0) {
+//           extra = 10;
+//         }
+//         int difference = (*rit1 - '0' + extra)- (borrow ? 1 : 0);
+//         // std::cout << "difference" << difference << std::endl;
+//         result = std::string(1, difference + '0') + result;
+//         borrow = (extra == 10);
+//         // std::cout << "reslt" << result << std::endl;
+//         rit1++;
+//       }
 
-      // while (rit2 != other.getNum().rend()) {
-      //   int extra = 0;
-      //   if ((*rit1 - '0') - (*rit2 - '0') < 0) {
-      //     extra = 10;
-      //   }
-      //   int difference = (*rit1 - '0' + extra) - (*rit2 - '0') - (borrow ? 1 : 0);
-      //   result = std::string(1, difference + '0') + result;
-      //   borrow = (extra == 10);
-      // }
+//       // while (rit2 != other.getNum().rend()) {
+//       //   int extra = 0;
+//       //   if ((*rit1 - '0') - (*rit2 - '0') < 0) {
+//       //     extra = 10;
+//       //   }
+//       //   int difference = (*rit1 - '0' + extra) - (*rit2 - '0') - (borrow ? 1 : 0);
+//       //   result = std::string(1, difference + '0') + result;
+//       //   borrow = (extra == 10);
+//       // }
 
-      return Bignum(result);
+//       return Bignum(result);
 
-    }
-  } else {
-    std::cout << "HELLPPPPPPPPP" << std::endl;
+//     }
+//   } else {
+//     std::cout << "HELLPPPPPPPPP" << std::endl;
+//     return Bignum();
+//   }
+
+// };
+
+Bignum Bignum::operator-(const Bignum &other) const {
+  if (!this->check() || !other.check()) {
+    std::cerr << "Invalid numbers" << std::endl;
+    return Bignum();
+  }
+  if (*this < other) {
+    std::cerr << "Unsupported: Negative number" << std::endl;
     return Bignum();
   }
 
+  std::vector<char> result;
+  result.reserve(this->getNum().size());
+
+  bool borrow = false;
+  auto rit1 = this->getNum().rbegin();
+  auto rit2 = other.getNum().rbegin();
+
+  while (rit1 != this->getNum().rend()) {
+    int digit1 = *rit1 - '0';
+    int digit2 = (rit2 != other.getNum().rend()) ? *rit2 - '0' : 0;
+
+    int diff = digit1 - digit2 - (borrow ? 1 : 0);
+    borrow = diff < 0;
+    if (borrow) diff += 10;
+
+    result.push_back(diff + '0');
+    ++rit1;
+    if (rit2 != other.getNum().rend()) ++rit2;
+  }
+
+  while (result.size() > 1 && result.back() == '0') {
+    result.pop_back();
+  }
+
+  return Bignum(std::string(result.rbegin(), result.rend()));
 };
 
 Bignum Bignum::operator*(const Bignum &other) const
@@ -171,8 +208,9 @@ Bignum Bignum::operator*(const Bignum &other) const
     bool leadingZero = true;
     for (int num : result)
     {
-      if (num == 0 && leadingZero)
+      if (num == 0 && leadingZero) {
         continue;
+      }
       leadingZero = false;
       resultStr.push_back(num + '0');
     }
