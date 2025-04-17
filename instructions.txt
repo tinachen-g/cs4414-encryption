@@ -1,0 +1,13 @@
+Compile:
+g++ -std=c++11 -pthread -o bignum bignum.cpp main.cpp operation.cpp
+
+
+Encrypt:
+./bignum e < test/cake/cake.txt 
+
+Decrypt:
+./bignum d < test/cake/output.txt
+
+
+Both:
+./bignum e < test/cake/cake.txt | ./bignum d
